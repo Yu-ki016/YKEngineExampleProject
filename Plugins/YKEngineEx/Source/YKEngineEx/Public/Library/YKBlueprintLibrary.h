@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "YKBlueprintLibrary.generated.h"
 
@@ -26,4 +25,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "YKEngine|Material")
 	static UTexture* GetTextureParameterValue(UMaterialInterface* InMaterial, FName ParameterName, bool &bFoundParam);
+
+	UFUNCTION(BlueprintCallable, Category = "YKEngine|Camera")
+	static bool GetViewportCameraInfo(FVector& CameraLocation, FRotator& CameraRotation);
 };

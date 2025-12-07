@@ -2,6 +2,8 @@
 
 
 #include "Library/YKBlueprintLibrary.h"
+#include "Editor/UnrealEd/Classes/Editor/EditorEngine.h"
+#include "LevelEditorViewport.h"
 
 bool UYKBlueprintLibrary::GetStaticSwitchParameterValue( UMaterialInterface* InMaterial, FName ParameterName , bool &bFoundParam)
 {
@@ -92,4 +94,29 @@ UTexture* UYKBlueprintLibrary::GetTextureParameterValue( UMaterialInterface* InM
 	}
 	
 	return OutValue;
+}
+
+bool UYKBlueprintLibrary::GetViewportCameraInfo( FVector& CameraLocation, FRotator& CameraRotation )
+{
+	bool RetVal = false;
+	CameraLocation = FVector::ZeroVector;
+	CameraRotation = FRotator::ZeroRotator;
+
+#if WITH_EDITOR
+	if (GEditor)
+	{
+		for (FLevelEditorViewportClient* LevelVC : GEditor->GetLevelViewportClients())
+		{
+			if (LevelVC && LevelVC->IsPerspective())
+			{
+				CameraLocation = LevelVC->GetViewLocation();
+				CameraRotation = LevelVC->GetViewRotation();
+				RetVal = true;
+				break;
+			}
+		}
+	}
+#endif
+
+	return RetVal;
 }
